@@ -155,26 +155,30 @@
         </h1>
 
         <div class="grid grid-cols-1 md:grid-cols-3 mt-6 gap-4">
+          {% for texto in textos %}
           <div
-            class="overflow-hidden rounded-lg bg-gray-800 ring-1 ring-white/15"
+            class="overflow-hidden rounded-lg bg-gray-800 ring-1 ring-white/15 {% if forloop.counter == 1%}lg:rounded-tr-[2rem]{% elif forloop.counter == 3%}lg:rounded-tl-[2rem] {% endif%}"
           >
             <img class="h-40 w-full" src="{% static 'waves.png'%}" alt="" />
             <div class="p-10">
               <div>
+                {% for i in textos.get_tags%}
                 <span
                   class="inline-flex items-center rounded-md bg-indigo-400/10 px-2 py-1 text-xs font-medium text-indigo-400 ring-1 ring-inset ring-indigo-400/30"
-                  >Viagem</span
+                  >{{i}}</span
                 >
+                {% endfor%}
               </div>
 
               <p class="mt-2 text-lg font-medium tracking-tight text-white">
-                Viagem para holanda
+                {{texto.titulo}}
               </p>
               <p class="mt-2 max-w-lg text-sm/6 text-gray-400">
-                Viajamos para holanda e visitamos de bicicleta ...
+                {{texto.texto|truncatewords:20}}
               </p>
             </div>
           </div>
+          {% endfor%}
         </div>
         <br />
         <br />
@@ -199,5 +203,100 @@
       </div>
     </div>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <canvas id="myChart" width="400" height="200"></canvas>
+  <script>
+    const ctx = document.getElementById('myChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: {{ nomes|safe }},
+        datasets: [{
+          label: 'Quantidade',
+          data: {{ qtds|safe }},
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const createChart = (canvasId, labels, data, label) => {
+      const ctx = document.getElementById(canvasId).getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: label,
+            data: data,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    };
+  
+    // Dados para o myChart
+    createChart(
+      'myChart',
+      {{ nomes|safe }},
+      {{ qtds|safe }},
+      'Quantidade por Nome'
+    );
+  
+    // Dados para o myChart2
+    createChart(
+      'myChart2',
+      {{ qtds|safe }},
+      {{ nomes|safe }},
+      'Quantidade por Valor'
+    );
+  </script>
   {% endblock 'body' %}
 </div>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block 'title' %} {% endblock 'title' %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    
     {% block 'head' %}{% endblock 'head' %}
   </head>
 
@@ -44,7 +45,9 @@
           </button>
         </div>
         <div class="hidden lg:flex lg:gap-x-12">
-          <a href="" class="text-sm/6 font-semibold text-white">Home</a>
+          <a href="{% url 'home'%}" class="text-sm/6 font-semibold text-white"
+            >Home</a
+          >
           <a
             href="{% url 'cadastrar_pessoa' %}"
             class="text-sm/6 font-semibold text-white"
